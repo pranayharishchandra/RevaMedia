@@ -62,7 +62,7 @@ export const followUnfollowUser = async (req, res) => {
 	}
 };
 
-
+// pick 10 random users and just check if current user not following, suggest them :)
 export const getSuggestedUsers = async (req, res) => {
 	//* suggested users = allUsers - myFollowingUsers - me
 	try {
@@ -159,7 +159,7 @@ export const updateUser = async (req, res) => {
 
 		user = await user.save();
 
-		// password should be null in response
+		// password should not be told in response (frontend)
 		user.password = null;
 
 		return res.status(200).json(user);

@@ -46,3 +46,19 @@ app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
 	connectMongoDB();
 });
+
+
+// const startServer = async () => {
+// 	try {
+// 		await connectMongoDB(); // Connect to MongoDB first
+// 		app.listen(PORT, () => {
+// 			console.log(`✅ Server is running on port ${PORT}`);
+// 			console.log(`📁 MongoDB connected successfully`);
+// 		});
+// 	} catch (error) {
+// 		console.error(`❌ Error starting server:`, error.message);
+// 		process.exit(1); // Exit process with failure
+// 	}
+// };
+
+// startServer();

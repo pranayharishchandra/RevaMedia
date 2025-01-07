@@ -29,6 +29,7 @@ export const signup = async (req, res) => {
 		const salt           = await bcrypt.genSalt(10);
 		const hashedPassword = await bcrypt.hash(password, salt);
 
+		// newUser is a document and then if new document was returned, save to DB, and return to frontend (not Document, but after converting into JSON format)
 		const newUser = new User({
 			fullName,
 			username,

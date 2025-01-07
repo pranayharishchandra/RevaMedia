@@ -22,7 +22,7 @@ const ProfilePage = () => {
 	const [profileImg, setProfileImg] = useState(null);
 	const [feedType, setFeedType]     = useState("posts");
 
-	const coverImgRef   = useRef(null); // buttons are ugly, so disappear them and use the icons to click button by refering 
+	const coverImgRef   = useRef(null); //* buttons are ugly, so disappear them and use the icons to click button by refering 
 	const profileImgRef = useRef(null);
 
 	//* <Route path = '/profile/:username' element = { authUser ? <ProfilePage /> : <Navigate to='/login' />} />
@@ -259,4 +259,5 @@ const ProfilePage = () => {
 		</>
 	);
 };
+
 export default ProfilePage;

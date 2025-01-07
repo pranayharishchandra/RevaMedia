@@ -27,11 +27,23 @@ export const createPost = async (req, res) => {
 			      img              = uploadedResponse.secure_url;
 		}
 
+/*
+		//* old-1
 		const newPost = new Post({
 			user: userId,
 			text,
 			img,
 		});
+	*	if there is not text:
+In MongoDB/Mongoose, when you set a field to undefined, that field will typically be omitted from the document entirely, not stored as undefined.
+ */
+		//* new-1
+		const postData = {
+			user: userId,
+			...(text && { text }), // though as in above comment i said undefined not stored, still i wrote condtition check
+			...(img && { img }),
+		};
+		const newPost = new Post(postData);
 
 		await newPost.save();
 		res.status(201).json(newPost);
@@ -231,7 +243,7 @@ export const getFollowingPosts = async (req, res) => {
 
 export const getUserPosts = async (req, res) => {
 	try {
-		const { username } = req.params; // some user 
+		const { username } = req.params; // not necessarly us, any user 
 
 		const user = await User.findOne({ username });
 		if (!user) return res.status(404).json({ error: "User not found" });

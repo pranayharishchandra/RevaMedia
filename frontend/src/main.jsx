@@ -13,6 +13,19 @@ const queryClient = new QueryClient({
 	},
 });
 
+/* refetchOnWindowFocus
+*By default, React Query has `refetchOnWindowFocus: true`
+
+When you switch back to your app's tab after being on another tab/window 
+
+* You might want to set this to false when:
+Your data doesn't change frequently
+You want to reduce unnecessary API calls
+You want more control over when data refreshes
+You're working with a limited API rate limit
+You're developing/testing and don't want automatic refreshes
+*/
+
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
 		<BrowserRouter>
@@ -95,7 +108,9 @@ const { data: authUser, isLoading } = useQuery({
 // Second Component
 const { data: authUser } = useQuery({
     queryKey: ["authUser"],
-**  // No queryFn here, will use the cached data fetched by the first component
+    **  // No `queryFn` here, will use the cached data fetched by the first component
+    **  // No `isLoading`, since using cashed data
+
 });
 
 ** ========================================================================
@@ -138,3 +153,87 @@ Best Practices:
 Define a central function (like in a separate api.js file) and import it wherever needed.
 Ensure the query function for queryKey: ["authUser"] is the same across components to avoid ambiguity and inconsistency.
  */
+
+/*
+?here how to make file to store function
+
+?should i store all functions with same query key in same file ?
+
+* answer:
+
+*   frontend/src/
+*   ├── api/
+*   │   ├── queries/
+    │   │   ├── auth.js
+    │   │   ├── posts.js
+    │   │   └── users.js
+*   │   └── mutations/
+    │       ├── auth.js
+    │       ├── posts.js
+    │       └── users.js
+
+* 2. query functions:
+//* Import any necessary utilities or configs
+import { api } from '../config';
+
+export const authQueries = {
+  //* Define the key as a constant to avoid typos
+  keys: {
+    authUser: ['authUser'],
+    userProfile: (userId) => ['user', userId],
+  },
+
+  //* Define the actual query functions
+  getAuthUser: async () => {
+    const res = await fetch("/api/auth/me");
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Something went wrong");
+    return data;
+  },
+
+  getUserProfile: async (userId) => {
+    const res = await fetch(`/api/users/${userId}`);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Something went wrong");
+    return data;
+  },
+};
+
+* 3. Similarly for mutations:
+
+? Yes, you're correct! While you could name it `postQueries`, using `postMutations` is considered "better practice" because it clearly indicates that these are mutation operations (write/update operations) rather than queries (read operations).
+export const postMutations = {
+  keys: {
+    createPost: ['posts', 'create'],
+    likePost: (postId) => ['posts', postId, 'like'],
+  },
+
+  createPost: async (postData) => {
+    const res = await fetch("/api/posts", {
+      method: 'POST',
+      body: JSON.stringify(postData),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Something went wrong");
+    return data;
+  },
+
+  likePost: async (postId) => {
+    // mutation implementation
+  },
+};
+
+* 4. Then in your components, you would use them like this:
+import { useQuery } from '@tanstack/react-query';
+import { authQueries } from '../api/queries/auth';
+
+function SomeComponent() {
+  const { data: authUser } = useQuery({
+    queryKey: authQueries.keys.authUser,
+    queryFn: authQueries.getAuthUser,
+  });
+
+  // ... rest of component
+}
+
+*/
