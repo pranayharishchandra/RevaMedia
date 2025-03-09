@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import XSvg from "../../../components/svgs/X";
+// import XSvg from "../../../components/svgs/X";
 
 import { MdOutlineMail } from "react-icons/md";
 import { MdPassword } from "react-icons/md";
@@ -73,7 +73,8 @@ const LoginPage = () => {
 
 				<form className='lg:w-2/3  mx-auto md:mx-20 flex gap-4 flex-col' onSubmit={handleSubmit}>
 
-					<XSvg className='w-24 lg:hidden fill-white' />
+					{/* folling was for X svg popup in mobile screen  */}
+					{/* <XSvg className='w-24 lg:hidden fill-white' /> */}
 					<h1 className='text-4xl font-extrabold text-white'>{"Let's"} go.</h1>
 					<label className='input input-bordered rounded flex items-center gap-2'>
 						<MdOutlineMail /> {/* Mail icon */}
